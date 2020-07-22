@@ -1,37 +1,31 @@
 <template>
-    <button v-if="!directoryHandle" @click="selectDirectory">Directory</button>
-    <Suspense v-else>
-        <Folder
-            :style="`height: ${windowHeight}px; overflow: auto;`"
-            :directoryHandle="directoryHandle"
-        />
-    </Suspense>
+	<Suspense>
+		<Folder
+			:style="`height: ${windowHeight}px; overflow: auto;`"
+			:directoryHandle="currentProjectFolder"
+		/>
+	</Suspense>
 </template>
 
 <script lang="ts">
-import { ref, onErrorCaptured, defineComponent } from "vue"
-import { windowHeight } from "../../utils/windowHeight"
-import Folder from "./Folder.vue"
+import { ref, onErrorCaptured, defineComponent } from 'vue'
+import { windowHeight } from '../../common/windowHeight'
+import Folder from './Folder.vue'
+import { currentProjectFolder } from '../../common/ENV'
+
 declare const chooseFileSystemEntries: (...args: unknown[]) => any
 
 export default defineComponent({
-    components: {
-        Folder,
-    },
-    setup(props) {
-        onErrorCaptured(console.error)
+	components: {
+		Folder,
+	},
+	setup(props) {
+		onErrorCaptured(console.error)
 
-        const directoryHandle = ref(null)
-        const selectDirectory = async () => {
-            directoryHandle.value = (await chooseFileSystemEntries({ type: 'open-directory', writable: true, }))
-        }
-
-
-        return {
-            directoryHandle,
-            selectDirectory,
-            windowHeight,
-        }
-    }
+		return {
+			currentProjectFolder,
+			windowHeight,
+		}
+	},
 })
 </script>

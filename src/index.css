@@ -8,8 +8,11 @@ html {
 
 #app {
 	font-family: 'Roboto';
+	user-select: none;
+}
+
+#ide-view {
 	display: grid;
 	width: 100%;
 	grid-template-columns: minmax(200px, 25%) 1fr;
-	user-select: none;
 }
