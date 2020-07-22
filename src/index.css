@@ -1,0 +1,15 @@
+* {
+	margin: 0;
+}
+
+html {
+	overflow: hidden;
+}
+
+#app {
+	font-family: 'Roboto';
+	display: grid;
+	width: 100%;
+	grid-template-columns: minmax(200px, 25%) 1fr;
+	user-select: none;
+}

@@ -1,0 +1,22 @@
+{
+  "name": "bridge-lite",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run build-workers && vite build",
+    "build-workers": "npm run build-main-worker && npm run build-json-worker && npm run build-ts-worker",
+    "build-main-worker": "rollup node_modules/monaco-editor/esm/vs/editor/editor.worker.js --file public/editor.worker.js --format iife",
+    "build-json-worker": "rollup node_modules/monaco-editor/esm/vs/language/json/json.worker --file public/json.worker.js --format iife",
+    "build-ts-worker": "rollup node_modules/monaco-editor/esm/vs/language/typescript/ts.worker --file public/ts.worker.js --format iife"
+  },
+  "dependencies": {
+    "monaco-editor": "^0.20.0",
+    "uuid": "^8.2.0",
+    "vue": "^3.0.0-rc.3",
+    "vue-router": "^4.0.0-beta.3"
+  },
+  "devDependencies": {
+    "@vue/compiler-sfc": "^3.0.0-rc.3",
+    "vite": "^1.0.0-rc.3"
+  }
+}
