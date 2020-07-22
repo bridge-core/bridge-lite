@@ -1,9 +1,8 @@
 <template>
 	<div>
-		<input v-model="projectName" @keydown.enter="createProject" />
-		<button @click="createProject" :disabled="projectName === null">
-			Create
-		</button>
+		<ActionInput v-model="projectName" @action="createProject">
+			Create Project
+		</ActionInput>
 	</div>
 
 	<ul>
@@ -26,16 +25,18 @@ import {
 } from '../common/ENV'
 import { forEach } from '../common/iterateFolder'
 import { router } from '../router'
+import ActionInput from '../components/Common/ActionInput.vue'
 
 export const projects = ref([])
 watch(
 	bridgeFolder,
 	async () => {
-		projectsFolder.value = await bridgeFolder.value
-			.getDirectory('projects', {
+		projectsFolder.value = await bridgeFolder.value.getDirectory(
+			'projects',
+			{
 				create: true,
-			})
-			.catch(console.error)
+			}
+		)
 	},
 	{ immediate: true }
 )
@@ -51,13 +52,38 @@ export const selectProject = (handle) => {
 	router.push('/ide')
 }
 export const createProject = async () => {
-	const handle = await projectsFolder.value.getDirectory(projectName.value, {
-		create: true,
-	})
-	projects.value.push(handle)
-	projects.value.sort(({ name: nameA }, { name: nameB }) =>
-		nameA.localeCompare(nameB)
-	)
+	let i = 0
+	let createProject = true
+	while (i < projects.value.length) {
+		if (
+			projects.value[i].name.toLowerCase() ===
+			projectName.value.toLowerCase()
+		) {
+			createProject = false //Folder already exists
+		} else if (
+			projects.value[i].name.localeCompare(projectName.value) >= 0
+		) {
+			break
+		}
+
+		i++
+	}
+
+	if (createProject) {
+		const handle = await projectsFolder.value.getDirectory(
+			projectName.value,
+			{
+				create: true,
+			}
+		)
+		projects.value.splice(i, 0, handle)
+	}
 	projectName.value = null
+}
+
+export default {
+	components: {
+		ActionInput,
+	},
 }
 </script>
