@@ -16,3 +16,7 @@ html {
 	width: 100%;
 	grid-template-columns: minmax(200px, 25%) 1fr;
 }
+
+.cursor-pointer {
+	cursor: pointer;
+}

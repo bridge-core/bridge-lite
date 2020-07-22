@@ -16,6 +16,7 @@ import { bridgeFolder } from '../common/ENV'
 declare const chooseFileSystemEntries: (...args: unknown[]) => any
 
 export const selectBridgeFolder = async () => {
+	if (bridgeFolder.value !== null) return router.push('/projects')
 	bridgeFolder.value = await chooseFileSystemEntries({
 		type: 'open-directory',
 	})

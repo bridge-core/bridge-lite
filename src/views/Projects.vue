@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<ActionInput v-model="projectName" @action="createProject">
+		<ActionInput v-model="projectName" @action="onCreateProject">
 			Create Project
 		</ActionInput>
 	</div>
@@ -9,6 +9,7 @@
 		<li
 			v-for="(folderHandle, i) in projects"
 			:key="i"
+			class="cursor-pointer"
 			@click="selectProject(folderHandle)"
 		>
 			{{ folderHandle.name }}
@@ -24,6 +25,7 @@ import {
 	currentProjectFolder,
 } from '../common/ENV'
 import { forEach } from '../common/iterateFolder'
+import { createProject } from '../projects/create'
 import { router } from '../router'
 import ActionInput from '../components/Common/ActionInput.vue'
 
@@ -51,33 +53,8 @@ export const selectProject = (handle) => {
 	currentProjectFolder.value = handle
 	router.push('/ide')
 }
-export const createProject = async () => {
-	let i = 0
-	let createProject = true
-	while (i < projects.value.length) {
-		if (
-			projects.value[i].name.toLowerCase() ===
-			projectName.value.toLowerCase()
-		) {
-			createProject = false //Folder already exists
-		} else if (
-			projects.value[i].name.localeCompare(projectName.value) >= 0
-		) {
-			break
-		}
-
-		i++
-	}
-
-	if (createProject) {
-		const handle = await projectsFolder.value.getDirectory(
-			projectName.value,
-			{
-				create: true,
-			}
-		)
-		projects.value.splice(i, 0, handle)
-	}
+export const onCreateProject = async () => {
+	createProject(projects, projectName.value)
 	projectName.value = null
 }
 
