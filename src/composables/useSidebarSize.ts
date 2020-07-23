@@ -3,16 +3,19 @@ import { computed, ref } from 'vue'
 
 export function useSidebarSize() {
 	const { width, height } = useWindowSize()
-	const minSize = 200 //Sidebar min size is 200px
-	const maxSize = 0.2
-	const maxComputedSize = computed(() => width.value * maxSize) //Sidebar max size is 20% of the window size
+	const minWidth = 200 //Sidebar min width is 200px
+	const maxWidth = 0.2 //Sidebar max width is 20% of the window width
+	const maxComputedWidth = computed(() => width.value * maxWidth) //Get sidebar max width in absolute pxs
 
 	return {
-		maxSize,
-		minSize,
-		maxComputedSize,
+		maxWidth,
+		minWidth,
+		maxComputedWidth,
+		//Models the minmax() css function in use for the sidebar width
 		width: computed(() =>
-			minSize > maxComputedSize.value ? minSize : maxComputedSize.value
+			minWidth > maxComputedWidth.value
+				? minWidth
+				: maxComputedWidth.value
 		),
 		height,
 	}

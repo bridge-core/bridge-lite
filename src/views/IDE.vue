@@ -18,20 +18,23 @@ export default {
 		File,
 	},
 	setup() {
-		const { minSize: rawMinSize, maxSize: rawMaxSize } = useSidebarSize()
+		const {
+			minWidth: rawMinWidth,
+			maxWidth: rawMaxWidth,
+		} = useSidebarSize()
 
 		return {
-			minSize: `${rawMinSize}px`,
-			maxSize: `${rawMaxSize * 100}%`,
+			minWidth: `${rawMinWidth}px`,
+			maxWidth: `${rawMaxWidth * 100}%`,
 		}
 	},
 }
 </script>
 
-<style scoped vars="{ minSize, maxSize }">
+<style scoped vars="{ minWidth, maxWidth }">
 .ide-view {
 	display: grid;
 	width: 100%;
-	grid-template-columns: minmax(var(--minSize), var(--maxSize)) 1fr 1fr;
+	grid-template-columns: minmax(var(--minWidth), var(--maxWidth)) 1fr 1fr;
 }
 </style>
