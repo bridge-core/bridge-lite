@@ -20,9 +20,10 @@
 	</details>
 </template>
 
-<script lang="ts">
+<script>
 import { ref, defineComponent } from 'vue'
 import { file } from '../TabSystem/state'
+import { readFile } from '../../io/main'
 
 export default defineComponent({
 	name: 'Folder',
@@ -33,8 +34,8 @@ export default defineComponent({
 	async setup(props) {
 		const folders = ref([])
 		const files = ref([])
-		const openFile = async (handle: any) => {
-			file.value = await (await handle.getFile()).text()
+		const openFile = async (handle) => {
+			file.value = await readFile(handle)
 		}
 
 		for await (const handle of props.directoryHandle.getEntries()) {

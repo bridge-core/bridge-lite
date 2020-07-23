@@ -1,15 +1,27 @@
 <template>
-	<div ref="monacoContainer" :style="`height: ${windowHeight}px`" />
+	<div
+		ref="monacoContainer"
+		:style="`height: ${windowHeight}px; width: ${
+			windowWidth - sidebarWidth
+		}px;`"
+	/>
 </template>
 
-<script lang="ts">
+<script>
 import { v4 as uuid } from 'uuid'
-import { ref, defineComponent, onMounted, watch, onDeactivated } from 'vue'
+import {
+	ref,
+	defineComponent,
+	onMounted,
+	watch,
+	onDeactivated,
+	nextTick,
+} from 'vue'
 import * as monaco from 'monaco-editor'
 import { file } from './state'
-import { windowHeight } from '../../common/windowHeight'
+import { useWindowSize } from '@vueuse/core'
+import { useSidebarSize } from '../../composables/useSidebarSize'
 
-//@ts-ignore
 self.MonacoEnvironment = {
 	getWorkerUrl: function (moduleId, label) {
 		if (label === 'json') {
@@ -30,6 +42,8 @@ self.MonacoEnvironment = {
 
 export default defineComponent({
 	setup(props) {
+		const { width: windowWidth, height: windowHeight } = useWindowSize()
+		const { width: sidebarWidth } = useSidebarSize()
 		const monacoContainer = ref(null)
 		let URI = monaco.Uri.parse(uuid())
 		let monacoEditor = undefined
@@ -61,13 +75,15 @@ export default defineComponent({
 			monacoEditor.layout()
 		})
 
-		watch(windowHeight, () => {
+		watch([windowHeight, windowWidth, sidebarWidth], () => {
 			if (monacoEditor) monacoEditor.layout()
 		})
 
 		return {
 			file,
 			windowHeight,
+			windowWidth,
+			sidebarWidth,
 			monacoContainer,
 		}
 	},

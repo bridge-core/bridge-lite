@@ -10,6 +10,7 @@
     "build-ts-worker": "rollup node_modules/monaco-editor/esm/vs/language/typescript/ts.worker --file public/ts.worker.js --format iife"
   },
   "dependencies": {
+    "@vueuse/core": "^4.0.0-beta.2",
     "monaco-editor": "^0.20.0",
     "uuid": "^8.2.0",
     "vue": "^3.0.0-rc.3",

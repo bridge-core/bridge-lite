@@ -1,6 +1,6 @@
 import { Ref } from 'vue'
 import { projectsFolder } from '../common/ENV'
-import { writeJsonFile } from '../common/writeFile'
+import { writeJsonFile } from '../io/main'
 
 export async function createProject(
 	projects: Ref<THandle[]>,

@@ -24,7 +24,7 @@ import {
 	projectsFolder,
 	currentProjectFolder,
 } from '../common/ENV'
-import { forEach } from '../common/iterateFolder'
+import { forEach } from '../io/iterateFolder'
 import { createProject } from '../projects/create'
 import { router } from '../router'
 import ActionInput from '../components/Common/ActionInput.vue'
