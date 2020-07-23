@@ -18,7 +18,7 @@ import {
 	nextTick,
 } from 'vue'
 import * as monaco from 'monaco-editor'
-import { file } from './state'
+import { file, filePath } from './state'
 import { useWindowSize } from '@vueuse/core'
 import { useSidebarSize } from '../../composables/useSidebarSize'
 
@@ -45,32 +45,25 @@ export default defineComponent({
 		const { width: windowWidth, height: windowHeight } = useWindowSize()
 		const { width: sidebarWidth } = useSidebarSize()
 		const monacoContainer = ref(null)
-		let URI = monaco.Uri.parse(uuid())
+		let URI = ''
 		let monacoEditor = undefined
 		let currentModel = undefined
 
-		watch(
-			file,
-			() => {
-				if (monaco.editor.getModel(URI))
-					monaco.editor.getModel(URI).dispose()
-				URI = monaco.Uri.parse(uuid())
-				const currentModel = monaco.editor.createModel(
-					file.value,
-					'json',
-					URI
-				)
+		watch(file, () => {
+			if (monaco.editor.getModel(URI))
+				monaco.editor.getModel(URI).dispose()
+			URI = monaco.Uri.file(filePath.value)
 
-				if (monacoEditor) monacoEditor.setModel(currentModel)
-			},
-			{ immediate: true }
-		)
+			if (monacoEditor)
+				monacoEditor.setModel(
+					monaco.editor.createModel(file.value, 'json', URI)
+				)
+		})
 
 		onMounted(() => {
 			monacoEditor = monaco.editor.create(monacoContainer.value, {
 				roundedSelection: false,
 				autoIndent: 'full',
-				model: currentModel,
 			})
 			monacoEditor.layout()
 		})

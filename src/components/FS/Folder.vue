@@ -22,19 +22,20 @@
 
 <script>
 import { ref, defineComponent } from 'vue'
-import { file } from '../TabSystem/state'
+import { file, filePath } from '../TabSystem/state'
 import { readFile } from '../../io/main'
+import { getPath } from '../../io/getPath'
 
 export default defineComponent({
 	name: 'Folder',
 	props: {
-		//@ts-ignore
 		directoryHandle: FileSystemDirectoryHandle,
 	},
 	async setup(props) {
 		const folders = ref([])
 		const files = ref([])
 		const openFile = async (handle) => {
+			filePath.value = await getPath(handle)
 			file.value = await readFile(handle)
 		}
 

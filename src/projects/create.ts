@@ -24,12 +24,21 @@ export async function createProject(
 	})
 	projects.value.splice(i, 0, handle)
 
-	const configFile = await handle.getFile('config.json', { create: true })
-	writeJsonFile(configFile, {
-		name: projectName,
-		targets: {
-			dev: 'default',
-			publish: ['default', 'anyLanguage'],
-		},
-	})
+	await Promise.all([
+		handle
+			.getFile('config.json', { create: true })
+			.then((configFile: TFileHandle) =>
+				writeJsonFile(configFile, {
+					name: projectName,
+					targets: {
+						dev: 'default',
+						publish: ['default', 'anyLanguage'],
+					},
+				})
+			),
+		handle.getDirectory('builds', { create: true }),
+		handle.getDirectory('packs', { create: true }),
+		handle.getDirectory('worlds', { create: true }),
+		handle.getDirectory('marketing', { create: true }),
+	])
 }

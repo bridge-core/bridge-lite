@@ -1,5 +1,5 @@
-import { ref } from 'vue'
+import { ref, Ref } from 'vue'
 
-export const bridgeFolder = ref(null)
-export const projectsFolder = ref(null)
-export const currentProjectFolder = ref(null)
+export const bridgeFolder: Ref<null | TDirectoryHandle> = ref(null)
+export const projectsFolder: Ref<null | TDirectoryHandle> = ref(null)
+export const currentProjectFolder: Ref<null | TDirectoryHandle> = ref(null)
