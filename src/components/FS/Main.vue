@@ -1,17 +1,18 @@
 <template>
-	<Suspense>
-		<Folder
-			:style="`height: ${windowHeight}px; overflow: auto;`"
-			:directoryHandle="currentProjectFolder"
-		/>
-	</Suspense>
+	<span :style="`height: ${windowHeight}px; overflow: auto;`">
+		<div v-for="({ type, directoryHandle }, i) in packs" :key="i">
+			<Suspense>
+				<Folder :directoryHandle="directoryHandle" />
+			</Suspense>
+		</div>
+	</span>
 </template>
 
 <script lang="ts">
 import { ref, onErrorCaptured, defineComponent } from 'vue'
 import Folder from './Folder.vue'
-import { currentProjectFolder } from '../../common/ENV'
 import { useWindowSize } from '@vueuse/core'
+import { packs } from '../../projects/loadPacks'
 
 declare const chooseFileSystemEntries: (...args: unknown[]) => any
 
@@ -24,8 +25,8 @@ export default defineComponent({
 		const { height: windowHeight } = useWindowSize()
 
 		return {
-			currentProjectFolder,
 			windowHeight,
+			packs,
 		}
 	},
 })

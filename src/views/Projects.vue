@@ -28,6 +28,7 @@ import { forEach } from '../io/iterateFolder'
 import { createProject } from '../projects/create'
 import { router } from '../router'
 import ActionInput from '../components/Common/ActionInput.vue'
+import { loadPacks } from '../projects/loadPacks'
 
 export const projects = ref([])
 watch(
@@ -49,8 +50,9 @@ watch(projectsFolder, () => {
 })
 
 export const projectName = ref(null)
-export const selectProject = (handle) => {
+export const selectProject = async (handle) => {
 	currentProjectFolder.value = handle
+	await loadPacks(await handle.getDirectory('packs'))
 	router.push('/ide')
 }
 export const onCreateProject = async () => {

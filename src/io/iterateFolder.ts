@@ -2,9 +2,11 @@ export async function forEach(
 	directoryHandle: TDirectoryHandle,
 	cb: (handle: THandle) => void
 ) {
+	const promises = []
 	for await (const handle of directoryHandle.getEntries()) {
-		cb(handle)
+		promises.push(cb(handle))
 	}
+	await Promise.all(promises)
 }
 export async function recursiveForEach(
 	directoryHandle: TDirectoryHandle,
