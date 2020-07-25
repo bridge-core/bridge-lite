@@ -56,7 +56,7 @@ export default defineComponent({
 
 			if (monacoEditor)
 				monacoEditor.setModel(
-					monaco.editor.createModel(file.value, 'json', URI)
+					monaco.editor.createModel(file.value, null, URI)
 				)
 		})
 
