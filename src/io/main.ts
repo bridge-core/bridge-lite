@@ -16,6 +16,6 @@ export async function readFile(fileHandle: TFileHandle) {
 	return await (await readFileRaw(fileHandle)).text()
 }
 
-export async function readJsonFile(fileHandle: TFileHandle) {
+export async function readJsonFile(fileHandle: TFileHandle): Promise<unknown> {
 	return (await new Response(await readFileRaw(fileHandle))).json()
 }

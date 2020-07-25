@@ -12,7 +12,7 @@ export const packs = ref<IPack[]>([])
 export async function loadPacks(packsHandle: TDirectoryHandle) {
 	await forEach(packsHandle, async (packHandle) => {
 		const manifestFile = await packHandle.getFile('manifest.json')
-		const manifestData = await readJsonFile(manifestFile)
+		const manifestData: any = await readJsonFile(manifestFile)
 
 		for (let module of manifestData?.modules ?? []) {
 			if (!packTypes.includes(module?.type)) continue
