@@ -3,8 +3,8 @@ import { currentProjectFolder } from '../common/ENV'
 import { getPath, getFile } from '../io/path'
 
 export interface ITransformer {
-	matches: (currentFilePath: string[]) => Promise<boolean>
-	transform: (buildDir: string[]) => Promise<string[]>
+	matches: (currentFilePath: string[]) => Promise<boolean> | boolean
+	transform: (buildDir: string[]) => Promise<string[]> | string[]
 }
 
 const pathTransformerMap = new Map<string, ITransformer[]>()
@@ -31,7 +31,7 @@ export async function transformPath({
 	return await getFile(currentProjectFolder.value, compileFilePath, true)
 }
 
-export function addTransformor(packType: string, transformer: ITransformer) {
+export function addTransformer(packType: string, transformer: ITransformer) {
 	if (pathTransformerMap.has(packType))
 		pathTransformerMap.get(packType)?.push(transformer)
 	else pathTransformerMap.set(packType, [transformer])

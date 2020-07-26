@@ -3,8 +3,8 @@ import { ref, Ref } from 'vue'
 import { getFileData } from './fileReaders'
 
 export interface IProcessor {
-	matches: (fileHandle: TFileHandle) => boolean
-	process: (fileContent: Ref<unknown>) => void
+	matches: (fileHandle: TFileHandle) => Promise<boolean> | boolean
+	process: (fileContent: Ref<unknown>) => Promise<void> | void
 }
 
 const processorMap = new Map<string, IProcessor[]>()
@@ -14,7 +14,7 @@ export async function processFile({ fileHandle, packType }: ICompilerData) {
 	const fileContent = ref(await getFileData(fileHandle))
 
 	for (let processor of processors) {
-		if (processor.matches(fileHandle)) processor.process(fileContent)
+		if (processor.matches(fileHandle)) await processor.process(fileContent)
 	}
 
 	return fileContent.value
