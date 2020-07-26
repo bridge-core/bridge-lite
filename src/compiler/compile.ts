@@ -1,7 +1,7 @@
 import { usedByMap } from './usedByMap'
 import { processFile, addProcessor } from './fileProcessors'
 import { transformPath, addTransformer } from './pathTransformers'
-import { writeFileData } from './fileReaders'
+import { writeFileData } from './fsWrapper'
 import { getFile } from '../io/path'
 import { Ref } from 'vue'
 
@@ -33,14 +33,22 @@ addProcessor('BP', {
 	matches: () => true,
 	process: (fileContent: Ref<unknown>) => {
 		fileContent.value = {
-			'Test Compile': 'I am the first file bridge.-lite compiled!',
+			'@meta': {
+				createdWith: 'bridge.',
+				comment: 'I am the first file bridge.-lite compiled!',
+			},
+			...(<Object>fileContent.value),
 		}
 	},
 })
 addTransformer('BP', {
 	matches: () => true,
 	transform: (filePath: string[]) => {
-		const basePath = filePath.slice(0, filePath.length - 2)
-		return [...basePath, 'manifests', 'main.json']
+		const basePath = filePath.slice(0, filePath.length - 1)
+		return [
+			...basePath,
+			filePath[filePath.length - 1].replace('.json', ''),
+			'main.json',
+		]
 	},
 })

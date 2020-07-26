@@ -1,6 +1,6 @@
 import { ICompilerData } from './compile'
-import { ref, Ref } from 'vue'
-import { getFileData } from './fileReaders'
+import { Ref, shallowRef } from 'vue'
+import { getFileData } from './fsWrapper'
 
 export interface IProcessor {
 	matches: (fileHandle: TFileHandle) => Promise<boolean> | boolean
@@ -11,7 +11,7 @@ const processorMap = new Map<string, IProcessor[]>()
 
 export async function processFile({ fileHandle, packType }: ICompilerData) {
 	const processors = processorMap.get(packType) ?? []
-	const fileContent = ref(await getFileData(fileHandle))
+	const fileContent = shallowRef(await getFileData(fileHandle))
 
 	for (let processor of processors) {
 		if (processor.matches(fileHandle)) await processor.process(fileContent)
@@ -23,4 +23,10 @@ export async function processFile({ fileHandle, packType }: ICompilerData) {
 export function addProcessor(packType: string, processor: IProcessor) {
 	if (processorMap.has(packType)) processorMap.get(packType)?.push(processor)
 	else processorMap.set(packType, [processor])
+
+	return {
+		dispose: () => {
+			//TODO
+		},
+	}
 }

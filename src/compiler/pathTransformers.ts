@@ -24,7 +24,6 @@ export async function transformPath({
 	for (let transformer of transformers) {
 		if (await transformer.matches(currentFilePath)) {
 			compileFilePath = await transformer.transform(compileFilePath)
-			break
 		}
 	}
 
@@ -35,4 +34,10 @@ export function addTransformer(packType: string, transformer: ITransformer) {
 	if (pathTransformerMap.has(packType))
 		pathTransformerMap.get(packType)?.push(transformer)
 	else pathTransformerMap.set(packType, [transformer])
+
+	return {
+		dispose: () => {
+			//TODO
+		},
+	}
 }
