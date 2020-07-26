@@ -24,7 +24,8 @@
 import { ref, defineComponent } from 'vue'
 import { file, filePath } from '../TabSystem/state'
 import { readFile } from '../../io/main'
-import { getPath } from '../../io/getPath'
+import { getStrPath } from '../../io/path'
+import { bridgeFolder } from '../../common/ENV'
 
 export default defineComponent({
 	name: 'Folder',
@@ -35,7 +36,7 @@ export default defineComponent({
 		const folders = ref([])
 		const files = ref([])
 		const openFile = async (handle) => {
-			filePath.value = await getPath(handle)
+			filePath.value = await getStrPath(bridgeFolder.value, handle)
 			file.value = await readFile(handle)
 		}
 

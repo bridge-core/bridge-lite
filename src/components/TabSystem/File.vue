@@ -21,6 +21,7 @@ import * as monaco from 'monaco-editor'
 import { file, filePath } from './state'
 import { useWindowSize } from '@vueuse/core'
 import { useSidebarSize } from '../../composables/useSidebarSize'
+import { compile } from '../../compiler/compile'
 
 self.MonacoEnvironment = {
 	getWorkerUrl: function (moduleId, label) {

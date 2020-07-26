@@ -1,9 +1,10 @@
 import { ICompilerData } from './compile'
 import { currentProjectFolder } from '../common/ENV'
+import { getPath, getFile } from '../io/path'
 
 export interface ITransformer {
-	matches: (fileHandle: TFileHandle) => Promise<boolean>
-	transform: (fileHandle: TFileHandle) => Promise<void>
+	matches: (currentFilePath: string[]) => Promise<boolean>
+	transform: (buildDir: string[]) => Promise<string[]>
 }
 
 const pathTransformerMap = new Map<string, ITransformer[]>()
@@ -11,22 +12,23 @@ const pathTransformerMap = new Map<string, ITransformer[]>()
 export async function transformPath({
 	fileHandle,
 	packType,
-	packName,
 	buildName,
 }: ICompilerData) {
 	const transformers = pathTransformerMap.get(packType) ?? []
-	const buildDir = await (
-		await (
-			await currentProjectFolder.value.getDirectory('builds')
-		).getDirectory(buildName)
-	).getDirectory('packs', { create: true })
+	const currentFilePath = await getPath(
+		currentProjectFolder.value,
+		fileHandle
+	)
+	let compileFilePath = ['builds', buildName, ...currentFilePath]
 
 	for (let transformer of transformers) {
-		if (await transformer.matches(fileHandle))
-			return await transformer.transform(buildDir)
+		if (await transformer.matches(currentFilePath)) {
+			compileFilePath = await transformer.transform(compileFilePath)
+			break
+		}
 	}
 
-	return buildDir.getDirectory(packName)
+	return await getFile(currentProjectFolder.value, compileFilePath, true)
 }
 
 export function addTransformor(packType: string, transformer: ITransformer) {
