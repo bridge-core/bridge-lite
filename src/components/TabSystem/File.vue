@@ -22,6 +22,7 @@ import { file, filePath } from './state'
 import { useWindowSize } from '@vueuse/core'
 import { useSidebarSize } from '../../composables/useSidebarSize'
 import { compile } from '../../compiler/compile'
+import { useDarkMode } from '../../composables/useDarkMode'
 
 self.MonacoEnvironment = {
 	getWorkerUrl: function (moduleId, label) {
@@ -43,6 +44,7 @@ self.MonacoEnvironment = {
 
 export default defineComponent({
 	setup(props) {
+		const { isDarkMode } = useDarkMode()
 		const { width: windowWidth, height: windowHeight } = useWindowSize()
 		const { width: sidebarWidth } = useSidebarSize()
 		const monacoContainer = ref(null)
@@ -65,12 +67,17 @@ export default defineComponent({
 			monacoEditor = monaco.editor.create(monacoContainer.value, {
 				roundedSelection: false,
 				autoIndent: 'full',
+				theme: isDarkMode.value ? 'vs-dark' : 'vs-light',
 			})
 			monacoEditor.layout()
 		})
 
 		watch([windowHeight, windowWidth, sidebarWidth], () => {
 			if (monacoEditor) monacoEditor.layout()
+		})
+
+		watch(isDarkMode, (value) => {
+			monaco.editor.setTheme(value ? 'vs-dark' : 'vs-light')
 		})
 
 		return {

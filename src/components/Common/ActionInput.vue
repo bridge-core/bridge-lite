@@ -1,21 +1,28 @@
 <template>
-	<input
+	<TileInput
 		:value="modelValue"
 		@input="$emit('update:modelValue', $event.target.value)"
-		@keydown.enter="$emit('action')"
+		@action="$emit('action')"
 	/>
-	<button @click="$emit('action')" :disabled="disabled">
+	<TileButton @click="$emit('action')" :isDisabled="isDisabled">
 		<slot />
-	</button>
+	</TileButton>
 </template>
 
 <script>
+import TileButton from './TileButton.vue'
+import TileInput from './TileInput.vue'
+
 export default {
 	name: 'ActionInput',
 	emits: ['action', 'update:modelValue'],
 	props: {
-		disabled: Boolean,
+		isDisabled: Boolean,
 		modelValue: String,
+	},
+	components: {
+		TileButton,
+		TileInput,
 	},
 }
 </script>
