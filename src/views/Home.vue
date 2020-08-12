@@ -6,13 +6,14 @@
 			Select the location to save your projects to in order to start using
 			bridge.
 		</p>
-		<button @click="selectBridgeFolder">Get Started</button>
+		<TileButton @click="selectBridgeFolder"> Get Started </TileButton>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { router } from '../router'
 import { bridgeFolder } from '../common/ENV'
+import TileButton from '../components/Common/TileButton.vue'
 declare const chooseFileSystemEntries: (...args: unknown[]) => any
 
 export const selectBridgeFolder = async () => {
@@ -20,7 +21,14 @@ export const selectBridgeFolder = async () => {
 	bridgeFolder.value = await chooseFileSystemEntries({
 		type: 'open-directory',
 	})
+	console.log(bridgeFolder.value)
 	router.push('/projects')
+}
+
+export default {
+	components: {
+		TileButton,
+	},
 }
 </script>
 

@@ -31,11 +31,6 @@ export const onInput = (event: any) => {
 
 export default {
 	emits: ['action', 'update:modelValue'],
-	props: {
-		isDarkMode: {
-			default: globalIsDarkMode,
-		},
-	},
 }
 </script>
 
