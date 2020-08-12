@@ -1,9 +1,9 @@
-import { createRouter, createWebHistory, NavigationGuard } from 'vue-router'
-import { bridgeFolder } from './common/ENV'
+import { createRouter, createWebHistory } from 'vue-router'
 
 import Home from './views/Home.vue'
 import IDE from './views/IDE.vue'
 import Projects from './views/Projects.vue'
+import { bridgeFolder } from './common/ENV'
 
 export const router = createRouter({
 	history: createWebHistory(),
@@ -11,6 +11,10 @@ export const router = createRouter({
 		{
 			path: '/',
 			component: Home,
+			beforeEnter(to, from, next) {
+				if (bridgeFolder.value !== null) next('/projects')
+				else next()
+			},
 		},
 		{
 			path: '/projects',
