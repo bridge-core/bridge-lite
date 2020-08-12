@@ -1,10 +1,12 @@
 <template>
 	<div class="app-view">
+		<AppBar />
 		<router-view />
 	</div>
 </template>
 
 <script lang="ts" setup>
+import AppBar from './components/AppBar/Main.vue'
 import { useTheme } from './composables/useTheme'
 import { useDarkMode } from './composables/useDarkMode'
 import { useWindowSize } from '@vueuse/core'
@@ -17,6 +19,9 @@ export const { mainBackground, textColor } = useTheme(isDarkMode)
 export const windowHeight = computed(() => `${height.value}px`)
 export default {
 	name: 'App',
+	components: {
+		AppBar,
+	},
 }
 </script>
 

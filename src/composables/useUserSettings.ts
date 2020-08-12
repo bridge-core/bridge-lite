@@ -6,7 +6,7 @@ export async function useUserSettings() {
 	const settingsFile = bridgeFolder.value.getFile('settings.json', {
 		create: true,
 	})
-	const settingsData = reactive(await readJsonFile(settingsFile))
+	const settingsData = reactive(<object>await readJsonFile(settingsFile))
 
 	return {
 		getData: () => settingsData,

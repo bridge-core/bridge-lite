@@ -1,7 +1,7 @@
 <template>
 	<div
 		ref="monacoContainer"
-		:style="`height: ${windowHeight}px; width: ${
+		:style="`height: ${windowHeight - appBarHeight}px; width: ${
 			windowWidth - sidebarWidth
 		}px;`"
 	/>
@@ -23,6 +23,7 @@ import { useWindowSize } from '@vueuse/core'
 import { useSidebarSize } from '../../composables/useSidebarSize'
 import { compile } from '../../compiler/compile'
 import { useDarkMode } from '../../composables/useDarkMode'
+import { useAppBarSize } from '../../composables/useAppBarSize'
 
 self.MonacoEnvironment = {
 	getWorkerUrl: function (moduleId, label) {
@@ -47,6 +48,7 @@ export default defineComponent({
 		const { isDarkMode } = useDarkMode()
 		const { width: windowWidth, height: windowHeight } = useWindowSize()
 		const { width: sidebarWidth } = useSidebarSize()
+		const { height: appBarHeight } = useAppBarSize()
 		const monacoContainer = ref(null)
 		let URI = ''
 		let monacoEditor = undefined
@@ -59,7 +61,8 @@ export default defineComponent({
 
 			if (monacoEditor)
 				monacoEditor.setModel(
-					monaco.editor.createModel(file.value, null, URI)
+					monaco.editor.getModel(URI) ||
+						monaco.editor.createModel(file.value, null, URI)
 				)
 		})
 
@@ -84,6 +87,7 @@ export default defineComponent({
 			file,
 			windowHeight,
 			windowWidth,
+			appBarHeight,
 			sidebarWidth,
 			monacoContainer,
 		}

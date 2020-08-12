@@ -10,6 +10,8 @@ interface IPack {
 
 export const packs = ref<IPack[]>([])
 export async function loadPacks(packsHandle: TDirectoryHandle) {
+	packs.value = []
+
 	await forEach(packsHandle, async (packHandle) => {
 		const manifestFile = await packHandle.getFile('manifest.json')
 		const manifestData: any = await readJsonFile(manifestFile)
