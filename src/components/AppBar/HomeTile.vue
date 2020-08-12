@@ -2,7 +2,7 @@
 	<img
 		@click="$emit('click')"
 		src="../../assets/logo.png"
-		height="22"
+		height="14"
 		style="margin: 1px 0px;"
 		class="cursor-pointer"
 	/>
